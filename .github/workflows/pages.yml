@@ -21,20 +21,15 @@ jobs:
         uses: actions/checkout@v4
       - name: Configure Pages
         uses: actions/configure-pages@v5
-      - name: Prepare site from uploaded ZIP
+      - name: Extract uploaded site archive
         run: |
-          mkdir -p _site
-          if [ -f "MechToSpace Labs.zip" ]; then
-            unzip -oq "MechToSpace Labs.zip" -d _site
-          else
-            rsync -a --exclude='.git' --exclude='.github' --exclude='_site' ./ _site/
-          fi
-          if [ -f CNAME ]; then cp CNAME _site/CNAME; fi
-          test -f _site/index.html
+          mkdir -p site
+          unzip -o "MechToSpace Labs.zip" -d site
+          cp CNAME site/CNAME
       - name: Upload site
         uses: actions/upload-pages-artifact@v3
         with:
-          path: _site
+          path: site
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
